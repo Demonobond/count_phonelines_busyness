@@ -24,12 +24,15 @@ def handle_file(file_to_handle, f_start, f_end, f_conditions,delimiter) :
         next(reader) # Skip the header row.
         for row in reader:
             counter += 1
-            #if counter>80 : break
+            start = f_start(row)
+            end = f_end(row)
+            duration = end - start
+            if duration == timedelta(seconds=0):
+                print(duration)
+                print(row)
             if f_conditions(row):
-                duration = sum(x * int(t) for x, t in zip([3600, 60, 1], row[9].split(":")))
-                if duration == 0: continue 
-                start = f_start(row) #datetime.strptime(row[0]+" "+ row[1], '%Y-%m-%d %H:%M:%S')
-                end = f_end(row) # datetime.strptime(row[0]+" "+ row[1], '%Y-%m-%d %H:%M:%S')+timedelta(seconds=duration)
+                #duration = sum(x * int(t) for x, t in zip([3600, 60, 1], row[9].split(":")))
+                #if duration == 0: continue 
                 while len(ends)>0 and (ends[0]) < start : count_end()
                 if len(durations)-1 <= current_level : durations.insert(current_level+1,timedelta(seconds=0))
                 if current_level != -1 : durations[current_level] += start - previous_time
